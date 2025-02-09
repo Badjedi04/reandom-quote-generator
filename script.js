@@ -20,9 +20,19 @@ async function getQuote() {
 
 // Function to save a quote to localStorage
 function saveQuote() {
-    if (!window.currentQuote) return;
+    if (!window.currentQuote) {
+        alert("No quote to save!");
+        return;
+    }
 
     let savedQuotes = JSON.parse(localStorage.getItem("savedQuotes")) || [];
+    
+    // Prevent duplicate saving
+    if (savedQuotes.some(q => q.content === window.currentQuote.content)) {
+        alert("Quote already saved!");
+        return;
+    }
+
     savedQuotes.push(window.currentQuote);
     localStorage.setItem("savedQuotes", JSON.stringify(savedQuotes));
 
@@ -32,7 +42,7 @@ function saveQuote() {
 // Function to display saved quotes
 function showSavedQuotes() {
     let savedQuotes = JSON.parse(localStorage.getItem("savedQuotes")) || [];
-    
+
     if (savedQuotes.length === 0) {
         alert("No saved quotes yet.");
         return;
@@ -42,5 +52,5 @@ function showSavedQuotes() {
     alert("Saved Quotes:\n\n" + quotesList);
 }
 
-// Load a quote on startup
+// Load a quote when the page loads
 getQuote();
